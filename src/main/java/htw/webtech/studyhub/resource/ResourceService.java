@@ -9,6 +9,10 @@ public class ResourceService {
     @Autowired
     ResourceRepository repo;
 
+    public Iterable<Resource> getAll() {
+        return repo.findAll();
+    }
+
     public Resource save(Resource resource) {
         return repo.save(resource);
     }

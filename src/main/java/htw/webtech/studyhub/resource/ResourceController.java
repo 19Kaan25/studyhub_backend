@@ -10,6 +10,11 @@ public class ResourceController {
     @Autowired
     ResourceService service;
 
+    @GetMapping("/resources")
+    public Iterable<Resource> getAllResources() {
+        return service.getAll();
+    }
+
     @PostMapping("/resources")
     public Resource createResource(@RequestBody Resource resource) {
         return service.save(resource);
