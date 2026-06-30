@@ -1,7 +1,8 @@
-package htw.webtech.studyhub.resource;
+package htw.webtech.studyhub.post;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ResourceRepository extends CrudRepository<Resource, Long> { }
+public interface PostRepository extends CrudRepository<Post, Long> {
+}
