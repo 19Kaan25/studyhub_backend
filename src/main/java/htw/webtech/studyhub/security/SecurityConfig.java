@@ -37,6 +37,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Auth-Endpunkte oeffentlich
                         .requestMatchers("/api/auth/**").permitAll()
+                        //Fehlerbehebung für 401 (Registrierung)
+                        .requestMatchers("/error").permitAll()
                         // Feed + Detailansicht oeffentlich lesbar (auch ohne Token)
                         .requestMatchers(HttpMethod.GET, "/api/posts", "/api/posts/**").permitAll()
                         // Alles andere (POST/PUT/DELETE posts, comments, favorites, link-preview) braucht Token
