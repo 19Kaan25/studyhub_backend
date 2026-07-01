@@ -37,6 +37,11 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
+// Compile Java sources as UTF-8 so umlauts in comments/strings build on every system (incl. CI).
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
 tasks.named('test') {
     useJUnitPlatform()
 }

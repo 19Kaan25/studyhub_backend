@@ -17,7 +17,7 @@ import java.io.IOException;
  * bei Erfolg die Authentifizierung in den SecurityContext.
  *
  * Bewusst KEIN @Component: der Filter wird in der SecurityConfig manuell instanziiert,
- * damit Spring Boot ihn nicht zusaetzlich global registriert (doppelte Ausfuehrung).
+ * damit Spring Boot ihn nicht zusätzlich global registriert (doppelte Ausführung).
  */
 public class JwtAuthFilter extends OncePerRequestFilter {
 
@@ -52,7 +52,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
-            // Ungueltiges Token / unbekannter User -> Request bleibt unauthentifiziert.
+            // Ungültiges Token / unbekannter User -> Request bleibt unauthentifiziert.
             SecurityContextHolder.clearContext();
         }
 

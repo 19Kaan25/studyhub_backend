@@ -35,11 +35,11 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Auth-Endpunkte oeffentlich
+                        // Auth-Endpunkte öffentlich
                         .requestMatchers("/api/auth/**").permitAll()
                         //Fehlerbehebung für 401 (Registrierung)
                         .requestMatchers("/error").permitAll()
-                        // Feed + Detailansicht oeffentlich lesbar (auch ohne Token)
+                        // Feed + Detailansicht öffentlich lesbar (auch ohne Token)
                         .requestMatchers(HttpMethod.GET, "/api/posts", "/api/posts/**").permitAll()
                         // Alles andere (POST/PUT/DELETE posts, comments, favorites, link-preview) braucht Token
                         .anyRequest().authenticated()
