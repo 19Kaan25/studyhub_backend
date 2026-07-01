@@ -1,0 +1,30 @@
+name: Backend Tests (CI)
+
+# studyhub_backend ist ein eigenes Repo -> gradlew/build.gradle liegen in der Wurzel.
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code aus dem Repository
+        uses: actions/checkout@v4
+
+      - name: JDK 25 (Temurin) aufsetzen
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '25'
+          cache: 'gradle'
+
+      - name: Gradle Wrapper ausfuehrbar machen
+        run: chmod +x ./gradlew
+
+      - name: Tests ausfuehren
+        # Test-Profil (H2 + Dummy-Secret) -> keine echte DB / kein JWT_SECRET noetig
+        run: ./gradlew test --no-daemon
