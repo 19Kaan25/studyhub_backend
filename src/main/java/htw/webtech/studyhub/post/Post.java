@@ -42,6 +42,9 @@ public class Post {
 
     private String previewImageUrl;
 
+    // Dateiname des angehängten Dokuments (null = keine Datei). Die Bytes liegen in post_files.
+    private String fileName;
+
     // FK -> User. Bleibt vorerst nullable, wird im Auth-Schritt aus dem JWT befüllt.
     private Long userId;
 
@@ -85,6 +88,14 @@ public class Post {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public String getUrl() {

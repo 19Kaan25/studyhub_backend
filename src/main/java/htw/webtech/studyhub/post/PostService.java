@@ -8,13 +8,19 @@ import org.springframework.web.server.ResponseStatusException;
 public class PostService {
 
     private final PostRepository repo;
+    private final PostFileRepository fileRepo;
 
-    public PostService(PostRepository repo) {
+    public PostService(PostRepository repo, PostFileRepository fileRepo) {
         this.repo = repo;
+        this.fileRepo = fileRepo;
     }
 
     public Iterable<Post> getAll() {
         return repo.findAll();
+    }
+
+    public Iterable<Post> getByUser(Long userId) {
+        return repo.findByUserIdOrderByCreatedAtDesc(userId);
     }
 
     public Post get(Long id) {
@@ -45,6 +51,8 @@ public class PostService {
     public void delete(Long id, Long userId) {
         Post existing = get(id);
         requireOwner(existing, userId);
+        // Angehängte Datei mitlöschen, damit keine verwaisten Bytes zurückbleiben.
+        fileRepo.findByPostId(id).ifPresent(fileRepo::delete);
         repo.delete(existing);
     }
 

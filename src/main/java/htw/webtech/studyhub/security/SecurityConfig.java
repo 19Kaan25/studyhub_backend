@@ -39,6 +39,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         //Fehlerbehebung für 401 (Registrierung)
                         .requestMatchers("/error").permitAll()
+                        // "Meine Posts" braucht ein Token (muss VOR der öffentlichen GET-Regel stehen!)
+                        .requestMatchers(HttpMethod.GET, "/api/posts/mine").authenticated()
                         // Feed + Detailansicht öffentlich lesbar (auch ohne Token)
                         .requestMatchers(HttpMethod.GET, "/api/posts", "/api/posts/**").permitAll()
                         // Alles andere (POST/PUT/DELETE posts, comments, favorites, link-preview) braucht Token

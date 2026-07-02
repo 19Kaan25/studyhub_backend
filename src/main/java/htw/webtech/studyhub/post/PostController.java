@@ -34,6 +34,12 @@ public class PostController {
         return service.getAll();
     }
 
+    /** Nur die Posts des eingeloggten Users (für den "Meine Posts"-Reiter). */
+    @GetMapping("/mine")
+    public Iterable<Post> getMyPosts(@AuthenticationPrincipal UserDetails principal) {
+        return service.getByUser(currentUserId(principal));
+    }
+
     @GetMapping("/{id}")
     public Post getPost(@PathVariable Long id) {
         return service.get(id);

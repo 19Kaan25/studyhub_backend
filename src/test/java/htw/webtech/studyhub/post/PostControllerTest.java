@@ -128,4 +128,26 @@ class PostControllerTest {
                         .header("Authorization", "Bearer " + token))
                 .andExpect(status().isNoContent());
     }
+
+    @Test
+    void getMine_ohneToken_gibt401() throws Exception {
+        mockMvc.perform(get("/api/posts/mine"))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void getMine_zeigtNurEigenePosts() throws Exception {
+        // User A erstellt 2 Posts, User B einen
+        String tokenA = registriereUndHoleToken("mineA", "mineA@example.com");
+        erstellePost(tokenA, "Post A1");
+        erstellePost(tokenA, "Post A2");
+        String tokenB = registriereUndHoleToken("mineB", "mineB@example.com");
+        erstellePost(tokenB, "Post B1");
+
+        // User A darf nur seine 2 eigenen Posts sehen
+        mockMvc.perform(get("/api/posts/mine")
+                        .header("Authorization", "Bearer " + tokenA))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2));
+    }
 }
