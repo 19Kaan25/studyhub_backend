@@ -3,6 +3,8 @@ package htw.webtech.studyhub.post;
 import htw.webtech.studyhub.user.User;
 import htw.webtech.studyhub.user.UserService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,6 +31,7 @@ public class PostController {
 
     private final PostService service;
     private final UserService userService;
+    Logger logger = LoggerFactory.getLogger(PostController.class);
 
     public PostController(PostService service, UserService userService) {
         this.service = service;
@@ -74,7 +77,9 @@ public class PostController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Post createPost(@Valid @RequestBody Post post, @AuthenticationPrincipal UserDetails principal) {
-        return service.create(post, currentUserId(principal));
+        Post created = service.create(post, currentUserId(principal));
+        logger.info("Post {} wurde erstellt", created.getId());
+        return created;
     }
 
     /**
@@ -89,7 +94,9 @@ public class PostController {
     public Post updatePost(@PathVariable Long id,
                            @Valid @RequestBody Post post,
                            @AuthenticationPrincipal UserDetails principal) {
-        return service.update(id, post, currentUserId(principal));
+        Post updated = service.update(id, post, currentUserId(principal));
+        logger.info("Post {} wurde aktualisiert", id);
+        return updated;
     }
 
     /**
@@ -102,6 +109,7 @@ public class PostController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletePost(@PathVariable Long id, @AuthenticationPrincipal UserDetails principal) {
         service.delete(id, currentUserId(principal));
+        logger.info("Post {} wurde gelöscht", id);
     }
 
     /**

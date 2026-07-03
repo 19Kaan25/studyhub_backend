@@ -1,5 +1,7 @@
 package htw.webtech.studyhub.post;
 
+import htw.webtech.studyhub.comment.CommentRepository;
+import htw.webtech.studyhub.favorite.FavoriteRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -9,10 +11,17 @@ public class PostService {
 
     private final PostRepository repo;
     private final PostFileRepository fileRepo;
+    private final CommentRepository commentRepo;
+    private final FavoriteRepository favoriteRepo;
 
-    public PostService(PostRepository repo, PostFileRepository fileRepo) {
+    public PostService(PostRepository repo,
+                       PostFileRepository fileRepo,
+                       CommentRepository commentRepo,
+                       FavoriteRepository favoriteRepo) {
         this.repo = repo;
         this.fileRepo = fileRepo;
+        this.commentRepo = commentRepo;
+        this.favoriteRepo = favoriteRepo;
     }
 
     public Iterable<Post> getAll() {
@@ -51,8 +60,11 @@ public class PostService {
     public void delete(Long id, Long userId) {
         Post existing = get(id);
         requireOwner(existing, userId);
-        // Angehängte Datei mitlöschen
+        // Angehängte Datei, Kommentare und Favoriten-Markierungen mitlöschen,
+        // damit keine verwaisten Datensätze zurückbleiben.
         fileRepo.findByPostId(id).ifPresent(fileRepo::delete);
+        commentRepo.deleteByPostId(id);
+        favoriteRepo.deleteByPostId(id);
         repo.delete(existing);
     }
 

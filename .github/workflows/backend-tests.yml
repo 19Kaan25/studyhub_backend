@@ -26,5 +26,5 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Tests ausfuehren
-        # Test-Profil (H2 + Dummy-Secret) -> keine echte DB / kein JWT_SECRET noetig
+        # Test-Profil (H2 + Dummy-Secret) -> keine echte DB / kein JWT_SECRET nötig
         run: ./gradlew test --no-daemon
