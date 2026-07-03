@@ -9,7 +9,7 @@ import jakarta.persistence.Table;
 
 /**
  * Eine an einen Post angehängte Datei. Liegt bewusst in einer eigenen Tabelle,
- * damit die (potenziell großen) Bytes NICHT bei jedem Feed-Laden mitgezogen werden.
+ * damit die (potenziell großen) Bytes nicht bei jedem Feed-Laden mitgezogen werden.
  * Pro Post genau eine Datei (postId ist eindeutig).
  */
 @Entity

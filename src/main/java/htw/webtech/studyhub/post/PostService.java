@@ -29,7 +29,7 @@ public class PostService {
     }
 
     public Post create(Post post, Long userId) {
-        // userId kommt immer aus dem Token, nie aus dem Request-Body.
+        // userId kommt immer aus dem Token und nicht aus dem Request-Body.
         post.setUserId(userId);
         return repo.save(post);
     }
@@ -51,7 +51,7 @@ public class PostService {
     public void delete(Long id, Long userId) {
         Post existing = get(id);
         requireOwner(existing, userId);
-        // Angehängte Datei mitlöschen, damit keine verwaisten Bytes zurückbleiben.
+        // Angehängte Datei mitlöschen
         fileRepo.findByPostId(id).ifPresent(fileRepo::delete);
         repo.delete(existing);
     }

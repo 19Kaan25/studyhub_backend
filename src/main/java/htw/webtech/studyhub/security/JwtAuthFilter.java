@@ -15,9 +15,6 @@ import java.io.IOException;
 /**
  * Liest den "Authorization: Bearer <token>"-Header, validiert das JWT und setzt
  * bei Erfolg die Authentifizierung in den SecurityContext.
- *
- * Bewusst KEIN @Component: der Filter wird in der SecurityConfig manuell instanziiert,
- * damit Spring Boot ihn nicht zusätzlich global registriert (doppelte Ausführung).
  */
 public class JwtAuthFilter extends OncePerRequestFilter {
 

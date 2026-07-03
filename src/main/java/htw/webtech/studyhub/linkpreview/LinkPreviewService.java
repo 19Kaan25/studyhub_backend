@@ -5,6 +5,10 @@ import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
+/**
+ * Service zum Abrufen von Metadaten (Titel, Beschreibung, Bild) für externe Links.
+ * Dient der Vorschau in der Benutzeroberfläche.
+ */
 @Service
 public class LinkPreviewService {
 
@@ -19,10 +23,12 @@ public class LinkPreviewService {
     }
 
     /**
-     * Holt Titel/Beschreibung/Bild zu einer URL.
-     * YouTube-Links: YouTubes eigene oEmbed-Schnittstelle (microlink wird von YouTube geblockt).
-     * Alle anderen URLs: microlink.io.
-     * Bei jedem Fehler (Netzwerk, ungültige URL, kein Erfolg): leeres DTO, nie ein 500.
+     * Holt Titel, Beschreibung und Vorschaubild zu einer URL.
+     * Nutzt für YouTube-Links die eigene oEmbed-Schnittstelle, da Drittanbieter
+     * wie Microlink oft blockiert werden. Alle anderen URLs werden über microlink.io aufgelöst.
+     * @param url Die aufzulösende Ziel-URL
+     * @return Ein {@link LinkPreviewDto} mit den gefundenen Daten. Bei Fehlern (Netzwerk,
+     * ungültige URL) wird ein leeres DTO zurückgegeben, es werden keine Exceptions geworfen.
      */
     public LinkPreviewDto fetchPreview(String url) {
         if (isYoutubeUrl(url)) {
@@ -70,7 +76,7 @@ public class LinkPreviewService {
         }
     }
 
-    // --- Nur zum Einlesen der microlink-Antwort (unbekannte Felder werden ignoriert) ---
+    // zum Einlesen der microlink-Antwort (unbekannte Felder werden ignoriert)
     private record MicrolinkResponse(String status, MicrolinkData data) {
     }
 
@@ -80,7 +86,7 @@ public class LinkPreviewService {
     private record MicrolinkImage(String url) {
     }
 
-    // --- Nur zum Einlesen der YouTube-oEmbed-Antwort (JSON nutzt snake_case) ---
+    // zum Einlesen der YouTube-oEmbed-Antwort (JSON nutzt snake_case)
     private record YoutubeOembedResponse(
             String title,
             @JsonProperty("author_name") String authorName,

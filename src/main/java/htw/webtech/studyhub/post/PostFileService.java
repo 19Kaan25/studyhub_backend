@@ -29,7 +29,7 @@ public class PostFileService {
         this.postRepo = postRepo;
     }
 
-    /** Speichert (oder ersetzt) die Datei eines Posts. Nur der Eigentümer darf das. */
+    /** Speichert (oder ersetzt) die Datei eines Posts (nur der Eigentümer kann das) */
     public void store(Long postId, MultipartFile file, Long userId) {
         Post post = postRepo.findById(postId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post nicht gefunden: " + postId));
@@ -62,7 +62,7 @@ public class PostFileService {
         }
         fileRepo.save(postFile);
 
-        // Metadaten am Post ablegen, damit das Frontend weiß: hier gibt es einen Download
+        // Metadaten am Post ablegen, damit das Frontend weiß, dass es hier es einen Download gibt
         post.setFileName(postFile.getFileName());
         postRepo.save(post);
     }

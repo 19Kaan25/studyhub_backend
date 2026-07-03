@@ -15,6 +15,11 @@ import jakarta.validation.constraints.Size;
 
 import java.time.Instant;
 
+/**
+ * Repräsentiert einen Post innerhalb der StudyHub-Plattform.
+ * Ein Post bildet das zentrale Element zum Teilen von Lerninhalten und kann
+ * reinen Text, externe Links (inklusive Vorschau-Metadaten) oder Dateianhänge umfassen.
+ */
 @Entity
 @Table(name = "posts")
 public class Post {
@@ -45,7 +50,8 @@ public class Post {
     // Dateiname des angehängten Dokuments (null = keine Datei). Die Bytes liegen in post_files.
     private String fileName;
 
-    // FK -> User. Bleibt vorerst nullable, wird im Auth-Schritt aus dem JWT befüllt.
+    // eindeutige ID des Benutzers (Fremdschlüssel), der diesen Post erstellt hat.
+    // Bleibt vorerst nullable, wird im Auth-Schritt aus dem JWT befüllt.
     private Long userId;
 
     private Instant createdAt;

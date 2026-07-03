@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * REST-Controller für die Benutzerauthentifizierung.
+ * Stellt die öffentlichen Endpunkte für die Registrierung neuer Accounts und
+ * den Login bestehender Benutzer zur Verfügung.
+ */
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -23,6 +28,12 @@ public class AuthController {
         this.jwtService = jwtService;
     }
 
+    /**
+     * Registriert einen neuen Benutzer im System und loggt ihn direkt ein.
+     *
+     * @param request Das validierte {@link RegisterRequest} mit den Benutzerdaten.
+     * @return Eine {@link AuthResponse}, die das JWT und grundlegende Nutzerdaten enthält.
+     */
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public AuthResponse register(@Valid @RequestBody RegisterRequest request) {
@@ -31,6 +42,13 @@ public class AuthController {
         return new AuthResponse(token, user.getUsername(), user.getId());
     }
 
+    /**
+     * Authentifiziert einen bestehenden Benutzer anhand seiner Anmeldedaten.
+     *
+     * @param request Das validierte {@link LoginRequest} mit E-Mail und Passwort.
+     * @return Eine {@link AuthResponse}, die das JWT und grundlegende Nutzerdaten enthält,
+     * sofern die Zugangsdaten korrekt sind.
+     */
     @PostMapping("/login")
     public AuthResponse login(@Valid @RequestBody LoginRequest request) {
         User user = userService.authenticate(request.email(), request.password());

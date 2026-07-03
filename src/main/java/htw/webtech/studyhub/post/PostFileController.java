@@ -2,6 +2,8 @@ package htw.webtech.studyhub.post;
 
 import htw.webtech.studyhub.user.User;
 import htw.webtech.studyhub.user.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,12 +20,19 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+
+/**
+ * REST-Controller für die Dateiverwaltung von Beiträgen.
+ * Bietet spezialisierte Endpunkte zum Hochladen und Herunterladen von
+ * Dateianhängen für einen Post.
+ */
 @RestController
 @RequestMapping("/api/posts/{postId}/file")
 public class PostFileController {
 
     private final PostFileService fileService;
     private final UserService userService;
+    Logger logger = LoggerFactory.getLogger(PostFileController.class);
 
     public PostFileController(PostFileService fileService, UserService userService) {
         this.fileService = fileService;
@@ -42,6 +51,7 @@ public class PostFileController {
     /** Datei eines Posts herunterladen (öffentlich, wie das Lesen der Posts). */
     @GetMapping
     public ResponseEntity<byte[]> download(@PathVariable Long postId) {
+        logger.info("Die Datei mit Id" + postId + "wurde heruntergeladen");
         PostFile postFile = fileService.get(postId);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,
