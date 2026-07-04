@@ -12,6 +12,7 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.URL;
 
 import java.time.Instant;
 
@@ -32,9 +33,12 @@ public class Post {
     @Size(max = 200)
     private String title;
 
+    @Size(max = 5000)
     @Column(columnDefinition = "TEXT")
     private String content;
 
+    // Leerer Wert ist ok (z.B. bei Dokument-Posts), muss aber ansonsten eine gültige URL sein.
+    @URL
     private String url;
 
     @Enumerated(EnumType.STRING)

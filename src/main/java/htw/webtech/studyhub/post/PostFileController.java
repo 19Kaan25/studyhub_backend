@@ -51,7 +51,7 @@ public class PostFileController {
     /** Datei eines Posts herunterladen (öffentlich, wie das Lesen der Posts). */
     @GetMapping
     public ResponseEntity<byte[]> download(@PathVariable Long postId) {
-        logger.info("Die Datei mit Id" + postId + "wurde heruntergeladen");
+        logger.info("Datei zu Post {} wurde heruntergeladen", postId);
         PostFile postFile = fileService.get(postId);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,

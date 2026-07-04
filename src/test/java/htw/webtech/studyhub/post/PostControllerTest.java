@@ -106,6 +106,37 @@ class PostControllerTest {
     }
 
     @Test
+    void createPost_mitUngueltigerUrl_gibt400() throws Exception {
+        String token = registriereUndHoleToken("linkposter", "link.poster@example.com");
+
+        // "keine-url" ist keine gültige URL -> verletzt @URL -> 400 Bad Request
+        String body = """
+                { "title": "Mein Link", "type": "LINK", "url": "keine-url" }
+                """;
+
+        mockMvc.perform(post("/api/posts")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void createPost_mitGueltigerUrl_gibtCreated() throws Exception {
+        String token = registriereUndHoleToken("linkposter2", "link.poster2@example.com");
+
+        String body = """
+                { "title": "Mein Link", "type": "LINK", "url": "https://spring.io" }
+                """;
+
+        mockMvc.perform(post("/api/posts")
+                        .header("Authorization", "Bearer " + token)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isCreated());
+    }
+
+    @Test
     void deletePost_fremderUser_gibt403() throws Exception {
         // User A erstellt einen Post
         String tokenA = registriereUndHoleToken("userA", "userA@example.com");
